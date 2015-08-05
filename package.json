@@ -40,5 +40,8 @@
         "transform": [
             "babelify"
         ]
+    },
+    "dependencies": {
+        "babel": "^5.8.20"
     }
 }
