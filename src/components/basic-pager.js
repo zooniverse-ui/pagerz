@@ -16,8 +16,8 @@ export default React.createClass({
 
     getInitialState() {
         return {
-            nextPage: 0,
-            previousPage: 0,
+            nextPage: null,
+            previousPage: null,
             firstPage: 0,
             currentPage: null,
             lastPage: 0,

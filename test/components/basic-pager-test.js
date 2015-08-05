@@ -1,4 +1,4 @@
-import dom from '../test-setup';
+import {Child, pageFn} from '../test-setup';
 
 import React, {addons} from 'react/addons';
 import chai from 'chai';
@@ -9,20 +9,6 @@ let {expect, spy} = chai;
 
 import BasicPager from '../../src/components/basic-pager';
 
-var Child = React.createClass({
-    displayName: "Child",
-
-    getDefaultProps() {
-        return {
-            testProp: true
-        };
-    },
-
-    render() {
-        return( <p {...this.props}>{this.props.resource}</p>);
-    }
-});
-
 describe("BasicPager", () => {
     var pager;
 
@@ -32,19 +18,8 @@ describe("BasicPager", () => {
 
 
     beforeEach(() => {
-        let pageFn = (page) => {
-            let data = [[1,2,3], [4,5,6]];
-            return Promise.resolve({
-                currentPage: page,
-                nextPage: page == 2 ? null : 2,
-                lastPage: 2,
-                firstPage: 1,
-                previousPage: page == 1 ? null : 1 ,
-                data: data[page - 1]
-            });
-        };
         pager = addons.TestUtils.renderIntoDocument(<BasicPager getPage={pageFn}>
-                                                        <Child otherProp={false} />
+                                                    <Child otherProp={false} />
                                                     </BasicPager>);
     });
 
