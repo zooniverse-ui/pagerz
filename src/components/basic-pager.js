@@ -3,7 +3,7 @@ import React from 'react';
 let NOOP = Function.prototype;
 
 export default React.createClass({
-    displayName: 'Pager',
+    displayName: 'BasicPager',
 
     getDefaultProps() {
         return {

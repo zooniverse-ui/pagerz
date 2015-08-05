@@ -7,7 +7,7 @@ import spies from 'chai-spies';
 chai.use(spies);
 let {expect, spy} = chai;
 
-import Pager from '../../src/components/pager';
+import BasicPager from '../../src/components/basic-pager';
 
 var Child = React.createClass({
     displayName: "Child",
@@ -23,11 +23,11 @@ var Child = React.createClass({
     }
 });
 
-describe("Pager", () => {
+describe("BasicPager", () => {
     var pager;
 
     it("should exist", () => {
-        expect(Pager).to.be.ok;
+        expect(BasicPager).to.be.ok;
     });
 
 
@@ -43,17 +43,17 @@ describe("Pager", () => {
                 data: data[page - 1]
             });
         };
-        pager = addons.TestUtils.renderIntoDocument(<Pager getPage={pageFn}>
+        pager = addons.TestUtils.renderIntoDocument(<BasicPager getPage={pageFn}>
                                                         <Child otherProp={false} />
-                                                    </Pager>);
+                                                    </BasicPager>);
     });
 
     describe("#getPage", () => {
         it("should call the onPageChange callback", () => {
             let opcCbSpy = spy();
-            pager = addons.TestUtils.renderIntoDocument(<Pager onPageChange={opcCbSpy}>
+            pager = addons.TestUtils.renderIntoDocument(<BasicPager onPageChange={opcCbSpy}>
                                                             <Child otherProp={false} />
-                                                        </Pager>);
+                                                        </BasicPager>);
             return pager.getPage(2).then( () => {
                 expect(opcCbSpy).to.have.been.called.twice();
             });
