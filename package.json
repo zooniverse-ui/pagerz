@@ -5,7 +5,10 @@
     "main": "src/index.js",
     "scripts": {
         "test": "gulp test",
-        "test-sauce": "zuul -- test/**/*.js"
+        "test-sauce": "zuul -- test/**/*.js",
+        "patch-release": "npm version patch && npm publish && git push --follow-tags",
+        "minor-release": "npm version minor && npm publish && git push --follow-tags",
+        "major-release": "npm version major && npm publish && git push --follow-tags"
     },
     "repository": {
         "type": "git"
