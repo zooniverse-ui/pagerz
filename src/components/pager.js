@@ -6,23 +6,51 @@ export default class Pager extends BasicPager {
         return 'Pager';
     }
 
+    nextPage() {
+        var page = null;
+        this.state.data.slice(this.props.currentPage - 1).forEach((item, idx) => {
+            if (typeof item[0] === 'undefined') {
+                page = this.props.currentPage + idx;
+            }
+        });
+        return page;
+    }
+
     clickToLoadNext() {
-        if (this.state.nextPage) {
+        let page = this.nextPage();
+        if (page !== null) {
             return (
-                <div className="pager-next-page" onClick={this.getPage.bind(this, this.state.nextPage)}>
+                <div className="pager-next-page" onClick={this.getPage.bind(this, page)}>
                     Click To Load More
                 </div>
             );
         }
+        else {
+            return null;
+        }
+    }
+
+    previousPage() {
+        var page = null;
+        this.state.data.slice(0, this.props.currentPage).forEach((item, idx) => {
+            if (typeof item[0] === 'undefined') {
+                page = idx + 1;
+            }
+        });
+        return page;
     }
 
     clickToLoadPrevious() {
-        if (this.state.previousPage) {
+        let page = this.previousPage();
+        if (page !== null) {
             return (
-                <div className="pager-previous-page" onClick={this.getPage.bind(this, this.state.previousPage)}>
+                <div className="pager-previous-page" onClick={this.getPage.bind(this, page)}>
                     Click To Load More
                 </div>
             );
+        }
+        else {
+            return null;
         }
     }
 

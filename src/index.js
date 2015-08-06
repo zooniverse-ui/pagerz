@@ -1,3 +1,4 @@
-import Example from "./example.js"
+import Pager from "./components/pager";
+import BasicPager from "./components/basic-pager";
 
-export default {Example};
+export default {Pager, BasicPager};

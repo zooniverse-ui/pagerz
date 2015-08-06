@@ -4,6 +4,7 @@ import React from 'react';
 if (typeof document === 'undefined') {
     global.document = jsdom("<html><head></head><body></body></html>");
     global.window = document.parentWindow;
+    global.location = document.location;
     global.navigator = {
         userAgent: 'node.js'
     };
@@ -23,16 +24,10 @@ var Child = React.createClass({
     }
 });
 
-let pageFn = (page) => {
-    let data = [[1,2,3], [4,5,6]];
-    return Promise.resolve({
-        currentPage: page,
-        nextPage: page == 2 ? null : 2,
-        lastPage: 2,
-        firstPage: 1,
-        previousPage: page == 1 ? null : 1 ,
-        data: data[page - 1]
-    });
+let pageData = {
+    currentPage: 1,
+    pageCount: 2,
+    data: [1,2,3]
 };
 
-export {Child, pageFn};
+export {Child, pageData};

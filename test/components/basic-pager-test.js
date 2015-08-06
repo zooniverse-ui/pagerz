@@ -1,4 +1,4 @@
-import {Child, pageFn} from '../test-setup';
+import {Child, pageData} from '../test-setup';
 
 import React, {addons} from 'react/addons';
 import chai from 'chai';
@@ -18,8 +18,8 @@ describe("BasicPager", () => {
 
 
     beforeEach(() => {
-        pager = addons.TestUtils.renderIntoDocument(<BasicPager getPage={pageFn}>
-                                                    <Child otherProp={false} />
+        pager = addons.TestUtils.renderIntoDocument(<BasicPager {...pageData}>
+                                                       <Child otherProp={false} />
                                                     </BasicPager>);
     });
 
@@ -29,46 +29,23 @@ describe("BasicPager", () => {
             pager = addons.TestUtils.renderIntoDocument(<BasicPager onPageChange={opcCbSpy}>
                                                             <Child otherProp={false} />
                                                         </BasicPager>);
-            return pager.getPage(2).then( () => {
-                expect(opcCbSpy).to.have.been.called.twice();
-            });
+            pager.getPage(2);
+            expect(opcCbSpy).to.have.been.called.with(2);
         });
 
-        it("should update the pager state", () => {
-            return pager.getPage(2).then(() => {
-                expect(pager.state).to.deep.equal({
-                    currentPage: 2,
-                    data: [[1,2,3],[4,5,6]],
-                    firstPage: 1,
-                    lastPage: 2,
-                    previousPage: 1,
-                    nextPage: null
-                });
-            });
-        });
     });
 
     describe("#componentWillMount", () => {
         var getPageSpy;
 
-        beforeEach(() => {
-            getPageSpy = spy.on(pager, 'getPage');
+        it("should create a block of data", () => {
+            pager.componentWillMount();
+            expect(pager.state.data).to.have.length(2);
         });
 
-        context("when state.currentPage is set", () => {
-            it("should call this.getPage with state.currentPage", () => {
-                pager.state.currentPage = 5;
-                pager.componentWillMount();
-                expect(getPageSpy).to.have.been.called.with(5);
-            });
-        });
-
-        context("when props.currentPage is set", () => {
-            it("should call this.getPage with props.currentPage", () => {
-                pager.state.currentPage = null;
-                pager.componentWillMount();
-                expect(getPageSpy).to.have.been.called.with(1);
-            });
+        it("should assign the currentPage to the appropriate part of the component", () => {
+            pager.componentWillMount();
+            expect(pager.state.data[pager.props.currentPage - 1]).to.deep.equal([1,2,3]);
         });
     });
 

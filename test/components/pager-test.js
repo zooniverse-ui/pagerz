@@ -1,4 +1,4 @@
-import {Child, pageFn} from '../test-setup';
+import {Child, pageData} from '../test-setup';
 
 import React, {addons} from 'react/addons';
 import chai from 'chai';
@@ -10,14 +10,15 @@ let {expect, spy} = chai;
 import Pager from '../../src/components/pager';
 
 describe("Pager", () => {
-    var pager, currentPage;
-
+    var pager, currentPage, getPageSpy;
 
     describe("#render", () => {
         context("when previous Page is null", () => {
             beforeEach(() => {
                 currentPage = 1;
-                pager = addons.TestUtils.renderIntoDocument(<Pager currentPage={currentPage} getPage={pageFn}><Child /></Pager>);
+                getPageSpy = spy();
+                let props = Object.assign({}, pageData, {currentPage, onPageChange: getPageSpy});
+                pager = addons.TestUtils.renderIntoDocument(<Pager {...props}><Child /></Pager>);
             });
 
             it("should not render a previous page loader", () => {
@@ -32,17 +33,19 @@ describe("Pager", () => {
                 expect(nextPage).to.exist;
             });
 
-            it("clicking on the next page loader should load the next page", () => {
+            it("should call getPage with nextPage after clicking on the next page loader", () => {
                 let nextPage = addons.TestUtils.findRenderedDOMComponentWithClass(pager, 'pager-next-page');
                 addons.TestUtils.Simulate.click(nextPage);
-                expect(pager.state.currentPage).to.equal(2);
+                expect(getPageSpy).to.have.been.called.with(2);
             });
         });
 
         context("when next Page is null", () => {
             beforeEach(() => {
                 currentPage = 2;
-                pager = addons.TestUtils.renderIntoDocument(<Pager currentPage={currentPage} getPage={pageFn}><Child /></Pager>);
+                getPageSpy = spy();
+                let props = Object.assign({}, pageData, {currentPage, nextPage: null, previousPage: 1, onPageChange: getPageSpy});
+                pager = addons.TestUtils.renderIntoDocument(<Pager {...props}><Child /></Pager>);
             });
 
             it("should not render a next page loader", () => {
@@ -57,10 +60,10 @@ describe("Pager", () => {
                 expect(prevPage).to.exist;
             });
 
-            it("clicking on the previous page loader should load the previous page", () => {
+            it("should call getPage with previousPage after clicking on the previous page loader", () => {
                 let prevPage = addons.TestUtils.findRenderedDOMComponentWithClass(pager, 'pager-previous-page');
                 addons.TestUtils.Simulate.click(prevPage);
-                expect(pager.state.currentPage).to.equal(1);
+                expect(getPageSpy).to.have.been.called.with(1);
             });
         });
     });

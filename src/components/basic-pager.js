@@ -1,4 +1,5 @@
 import React from 'react';
+import {updatePageQueryParam} from '../lib/on-page-change';
 
 let NOOP = Function.prototype;
 
@@ -7,37 +8,34 @@ export default React.createClass({
 
     getDefaultProps() {
         return {
-            currentPage: 1,
+            pageCount: null,
+            currentPage: null,
             resourceProp: "resource",
-            onPageChange: NOOP,
-            getPage: (page) => { return Promise.resolve({}); }
+            data: [],
+            onPageChange: updatePageQueryParam
         };
     },
 
     getInitialState() {
         return {
-            nextPage: null,
-            previousPage: null,
-            firstPage: 0,
-            currentPage: null,
-            lastPage: 0,
-            data: []
+            data: null
         };
     },
 
     getPage(page) {
-        return this.props.getPage(page)
-            .then(({currentPage, nextPage, lastPage, firstPage, previousPage, data}) => {
-                this.state.data[currentPage - 1] = data;
-                data = this.state.data;
-                this.setState({currentPage, nextPage, lastPage, firstPage, previousPage, data}, () => {
-                    this.props.onPageChange(this.state.currentPage);
-                });
-            });
+        this.props.onPageChange(page);
     },
 
     componentWillMount() {
-        this.getPage(this.state.currentPage || this.props.currentPage);
+        let data = Array.apply(null, Array(this.props.pageCount)).map(() => { return []; });
+        data[this.props.currentPage - 1] = this.props.data;
+        this.setState({data: data});
+    },
+
+    componentWillReceiveProps({currentPage, data}) {
+        let newData = this.state.data;
+        newData[currentPage - 1] = data;
+        this.setState({data: newData});
     },
 
     children(dataPage) {
