@@ -1,12 +1,13 @@
 let changeSearchString = (searchString, changes) => {
     let params = searchString.slice(1).split('&').reduce((accum, query) => {
         let [key, value] = query.split('=');
-        accum[key] = value;
+        if (key && value) {
+            accum[key] = value;
+        }
         return accum;
     }, {});
 
     params = Object.assign({}, params, changes);
-
 
     let queryString = Object.keys(params).map((key) => {
         let value = params[key];

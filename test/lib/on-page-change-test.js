@@ -6,6 +6,11 @@ describe("changeSearchString", () => {
         let queryString = changeSearchString("?test=1&a=b&c=d", {a: "z"});
         expect(queryString).to.equal("?test=1&a=z&c=d");
     });
+
+    it("should not add 'undefined' params", () => {
+        let queryString = changeSearchString("", {a: "z"});
+        expect(queryString).to.equal("?a=z");
+    });
 });
 
 describe("updatePageQueryParam", () => {
