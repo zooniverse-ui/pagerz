@@ -1,14 +1,13 @@
 import React from 'react';
 import {updatePageQueryParam} from '../lib/on-page-change';
 
-let NOOP = Function.prototype;
-
 export default React.createClass({
     displayName: 'BasicPager',
 
     getDefaultProps() {
         return {
-            pageCount: null,
+            previousPage: null,
+            nextPage: null,
             currentPage: null,
             resourceProp: "resource",
             data: [],
@@ -18,23 +17,36 @@ export default React.createClass({
 
     getInitialState() {
         return {
+            previous: false,
             data: null
         };
     },
 
-    getPage(page) {
-        this.props.onPageChange(page);
+    getPage(page, previous) {
+        this.setState({previous}, () => {
+            this.props.onPageChange(page);
+        });
     },
 
     componentWillMount() {
-        let data = Array.apply(null, Array(this.props.pageCount)).map(() => { return []; });
-        data[this.props.currentPage - 1] = this.props.data;
+        let data = new Map();
+        data.set(this.props.currentPage, this.props.data);
         this.setState({data: data});
     },
 
     componentWillReceiveProps({currentPage, data}) {
         let newData = this.state.data;
-        newData[currentPage - 1] = data;
+        if (this.state.previous) {
+            let mapContents = [[currentPage, data]];
+            for (let entry of newData.entries()) {
+                mapContents.push(entry);
+            }
+
+            newData = new Map(mapContents);
+        }
+        else {
+            newData.set(currentPage, data);
+        }
         this.setState({data: newData});
     },
 
@@ -47,19 +59,25 @@ export default React.createClass({
         });
     },
 
-    renderPage(page, idx) {
+    renderPage(data, page) {
         return (
-            <div key={idx} className="page">
-                {this.children(page)}
+            <div key={page} className="page">
+                {this.children(data)}
             </div>
         );
     },
 
     render() {
+        let children = [];
+
+        this.state.data.forEach((data, page) => {
+            children.push(this.renderPage(data, page));
+        });
+
         return(
             <div className="pager">
                 <div className="paged-resources">
-                    {this.state.data.map(this.renderPage)}
+                    {children}
                 </div>
             </div>
         );

@@ -27,4 +27,5 @@ build/Release
 node_modules
 npm-debug.log
 
-/out/*
+/out/
+*.tern-port

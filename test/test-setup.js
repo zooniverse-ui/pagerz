@@ -25,8 +25,9 @@ var Child = React.createClass({
 });
 
 let pageData = {
+    nextPage: 2,
+    previousPage: null,
     currentPage: 1,
-    pageCount: 2,
     data: [1,2,3]
 };
 

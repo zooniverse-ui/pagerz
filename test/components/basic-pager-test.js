@@ -38,14 +38,14 @@ describe("BasicPager", () => {
     describe("#componentWillMount", () => {
         var getPageSpy;
 
-        it("should create a block of data", () => {
+        it("should create a map of data", () => {
             pager.componentWillMount();
-            expect(pager.state.data).to.have.length(2);
+            expect(pager.state.data).to.be.an.instanceof(Map);
         });
 
         it("should assign the currentPage to the appropriate part of the component", () => {
             pager.componentWillMount();
-            expect(pager.state.data[pager.props.currentPage - 1]).to.deep.equal([1,2,3]);
+            expect(pager.state.data.get(pager.props.currentPage)).to.deep.equal([1,2,3]);
         });
     });
 

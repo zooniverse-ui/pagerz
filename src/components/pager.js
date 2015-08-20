@@ -6,21 +6,12 @@ export default class Pager extends BasicPager {
         return 'Pager';
     }
 
-    nextPage() {
-        var page = null;
-        this.state.data.slice(this.props.currentPage - 1).forEach((item, idx) => {
-            if (typeof item[0] === 'undefined') {
-                page = this.props.currentPage + idx;
-            }
-        });
-        return page;
-    }
-
     clickToLoadNext() {
-        let page = this.nextPage();
-        if (page !== null) {
+        let page = this.state.data.get(this.props.nextPage);
+        if ((this.props.nextPage !== null) && (page === undefined)) {
+            let handler = this.getPage.bind(this, this.props.nextPage, false);
             return (
-                <div className="pager-next-page" onClick={this.getPage.bind(this, page)}>
+                <div className="pager-next-page" onClick={handler}>
                     Click To Load More
                 </div>
             );
@@ -30,21 +21,12 @@ export default class Pager extends BasicPager {
         }
     }
 
-    previousPage() {
-        var page = null;
-        this.state.data.slice(0, this.props.currentPage).forEach((item, idx) => {
-            if (typeof item[0] === 'undefined') {
-                page = idx + 1;
-            }
-        });
-        return page;
-    }
-
     clickToLoadPrevious() {
-        let page = this.previousPage();
-        if (page !== null) {
+        let page = this.state.data.get(this.props.previousPage);
+        if ((this.props.previousPage !== null) && (page === undefined)) {
+            let handler = this.getPage.bind(this, this.props.previousPage, true);
             return (
-                <div className="pager-previous-page" onClick={this.getPage.bind(this, page)}>
+                <div className="pager-previous-page" onClick={handler}>
                     Click To Load More
                 </div>
             );
