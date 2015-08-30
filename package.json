@@ -1,6 +1,6 @@
 {
   "name": "pagerz",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Library of Generic Paging UIs",
   "main": "src/index.js",
   "scripts": {
