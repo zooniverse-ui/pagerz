@@ -51,11 +51,17 @@ export default React.createClass({
     },
 
     children(dataPage) {
-        let childTemplate = React.Children.only(this.props.children);
         return dataPage.map((datum, idx) => {
-            let newProps = Object.assign({}, childTemplate.props, {key: idx});
-            newProps[this.props.resourceProp] = datum;
-            return React.createElement(childTemplate.type, newProps);
+            if (typeof this.props.children === 'function') {
+                console.log("HERE", datum);
+                return this.props.children(datum);
+            }
+            else {
+                let childTemplate = React.Children.only(this.props.children);
+                let newProps = Object.assign({}, childTemplate.props, {key: idx});
+                newProps[this.props.resourceProp] = datum;
+                return React.createElement(childTemplate.type, newProps);
+            }
         });
     },
 
@@ -76,7 +82,7 @@ export default React.createClass({
 
         return(
             <div className="pager">
-                <div className="paged-resources">
+                <div className={`paged-resources ${this.props.className}`}>
                     {children}
                 </div>
             </div>
