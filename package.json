@@ -1,7 +1,7 @@
 {
-  "name": "template",
+  "name": "pagerz",
   "version": "0.0.1",
-  "description": "Template for zooniverse ui library",
+  "description": "Library of Generic Paging UIs",
   "main": "src/index.js",
   "scripts": {
     "test": "gulp test",
