@@ -65,7 +65,7 @@ export default class PageNumberPager extends BasicPager {
 
                    <div className="paginator-page-selector">
                        Page&nbsp;
-                       <select value={currentPage} onChange={this.onSelectPage} ref="pageSelect">
+                       <select value={currentPage} onChange={this.onSelectPage.bind(this)} ref="pageSelect">
                            {Array.from(Array(pageCount).keys()).map(this.pageOption)}
                        </select> of {pageCount}
                    </div>
